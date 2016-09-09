@@ -31,9 +31,10 @@ PIN_ON  = 0
 # 0 == Normal AC, 1 == Heat pump with aux heat
 AC_TYPE = 0
 
-HEATER_PIN = 0
-AC_PIN = 1
-FAN_PIN = 2
+
+VIBRATION_PUMP_PIN = 11
+AF_VALVE_PIN = 13
+BREW_VALVE_PIN = 15
 
 # Heat pump configs
 # Heat pump reversing valve

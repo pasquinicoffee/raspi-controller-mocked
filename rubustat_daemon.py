@@ -81,18 +81,25 @@ class rubustatDaemon(Daemon):
     def configureGPIO(self):
         if GPIOE == 1:
             GPIO.setwarnings(False)
-            GPIO.setmode(GPIO.BCM)
+            GPIO.setmode(GPIO.BOARD)
             if DEBUG >= 1:
                 sys.stderr.write("Setting up GPIO.\n")
                 log = open("logs/debug_" + datetime.datetime.now().strftime('%Y%m%d') + ".log", "a")
                 log.write("Setting up GPIO at " + time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime()) + "\n")
                 log.close()
     
+            GPIO.setup(VIBRATION_PUMP_PIN, GPIO.OUT, intitial=PIN_OFF)
+            GPIO.setup(AF_VALVE_PIN, GPIO.OUT, intitial=PIN_OFF)
+            GPIO.setup(BREW_VALVE_PIN, GPIO.OUT, intitial=PIN_OFF)
             GPIO.setup(HEATER_PIN, GPIO.OUT, initial=PIN_OFF)
             GPIO.setup(OB_PIN, GPIO.OUT, initial=PIN_OFF)
             GPIO.setup(AC_PIN, GPIO.OUT, initial=PIN_OFF)
             GPIO.setup(FAN_PIN, GPIO.OUT, initial=PIN_OFF)
     
+            subprocess.Popen("echo " + str(VIBRATION_PUMP_PIN) + " > /sys/class/gpio/export", shell=True)
+            subprocess.Popen("echo " + str(AF_VALVE_PIN) + " > /sys/class/gpio/export", shell=True)
+            subprocess.Popen("echo " + str(BREW_VALVE_PIN) + " > /sys/class/gpio/export", shell=True)
+
             subprocess.Popen("echo " + str(HEATER_PIN) + " > /sys/class/gpio/export", shell=True)
             subprocess.Popen("echo " + str(OB_PIN) + " > /sys/class/gpio/export", shell=True)
             subprocess.Popen("echo " + str(AC_PIN) + " > /sys/class/gpio/export", shell=True)
@@ -593,11 +600,15 @@ if __name__ == "__main__":
         elif 'stop' == sys.argv[1]:
             #stop all HVAC activity when daemon stops
             GPIO.setwarnings(False)
-            GPIO.setmode(GPIO.BCM)
+            GPIO.setmode(GPIO.BOARD)
             GPIO.setup(HEATER_PIN, GPIO.OUT, initial=PIN_OFF)
             GPIO.setup(OB_PIN, GPIO.OUT, initial=PIN_OFF)
             GPIO.setup(AC_PIN, GPIO.OUT, initial=PIN_OFF)
             GPIO.setup(FAN_PIN, GPIO.OUT, initial=PIN_OFF)
+            GPIO.setup(VIBRATION_PUMP_PIN, GPIO.OUT, intitial=PIN_OFF)
+            GPIO.setup(AF_VALVE_PIN, GPIO.OUT, intitial=PIN_OFF)
+            GPIO.setup(BREW_VALVE_PIN, GPIO.OUT, intitial=PIN_OFF)
+            
             daemon.stop()
         elif 'restart' == sys.argv[1]:
             daemon.restart()
