@@ -1,7 +1,7 @@
 [main]
 
 #dictates logging
-DEBUG = 1
+DEBUG = 0
 
 # Use GPIO - only off for demo runs without GPIO
 GPIOE = 0

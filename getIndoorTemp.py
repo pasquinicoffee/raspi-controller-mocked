@@ -11,6 +11,7 @@ config = ConfigParser.ConfigParser()
 config.read("config.txt")
 
 def getIndoorTemp():
+    return 25
     subprocess.Popen('modprobe w1-gpio', shell=True)
     subprocess.Popen('modprobe w1-therm', shell=True)
     base_dir = '/sys/bus/w1/devices/'
